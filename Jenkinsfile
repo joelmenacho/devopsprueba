@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        NODE_ENV = "production"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -12,13 +16,13 @@ pipeline {
         stage('Instalar dependencias') {
             steps {
                 sh '''
-                  echo "===== Instalando dependencias del backend ====="
-                  cd backend
-                  npm install
+                    echo "===== Instalando dependencias del backend ====="
+                    cd backend
+                    npm install --legacy-peer-deps
 
-                  echo "===== Instalando dependencias del frontend ====="
-                  cd ../frontend
-                  npm install
+                    echo "===== Instalando dependencias del frontend ====="
+                    cd ../frontend
+                    npm install --legacy-peer-deps
                 '''
             }
         }
@@ -26,9 +30,9 @@ pipeline {
         stage('Build frontend') {
             steps {
                 sh '''
-                  echo "===== Construyendo frontend (React) ====="
-                  cd frontend
-                  npm run build
+                    echo "===== Build frontend ====="
+                    cd frontend
+                    npm run build
                 '''
             }
         }
@@ -36,22 +40,9 @@ pipeline {
         stage('Empaquetar release') {
             steps {
                 sh '''
-                  echo "===== Empaquetando release ====="
-
-                  rm -rf release
-                  mkdir -p release/backend release/frontend
-
-                  echo "Copiando backend..."
-                  cp -r backend/* release/backend/
-
-                  echo "Copiando build del frontend..."
-                  cp -r frontend/build release/frontend/build
-
-                  echo "Generando release.zip..."
-                  rm -f release.zip
-                  zip -r release.zip release
-
-                  echo "===== release.zip generado ====="
+                    echo "===== Empaquetando release ====="
+                    cd ..
+                    zip -r release.zip backend frontend
                 '''
             }
         }
@@ -59,9 +50,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                  echo "===== Ejecutando deploy.sh ====="
-                  chmod +x deploy.sh
-                  ./deploy.sh
+                    echo "===== Ejecutando deploy.sh ====="
+                    chmod +x deploy.sh
+                    ./deploy.sh
                 '''
             }
         }
@@ -69,11 +60,10 @@ pipeline {
 
     post {
         success {
-            archiveArtifacts artifacts: 'release.zip', fingerprint: true
-            echo "Release generado y desplegado correctamente."
+            echo 'El pipeline de release terminó OK.'
         }
         failure {
-            echo "El pipeline de release ha fallado."
+            echo 'El pipeline de release ha fallado.'
         }
     }
 }
