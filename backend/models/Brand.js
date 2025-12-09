@@ -1,15 +1,16 @@
-const express = require("express");
-const brandController = require("../controllers/Brand");
-const router = express.Router();
+// backend/models/Brand.js
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-router
-  .get("/", brandController.getAll)
-  .get("/:id", brandController.getById)
-  .post("/", brandController.create)
-  .patch("/:id", brandController.updateById)
-  .delete("/:id", brandController.deleteById);
+const brandSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+});
 
-module.exports = router;
+module.exports = mongoose.model("Brand", brandSchema);
+
 
 
 // const mongoose=require("mongoose")
