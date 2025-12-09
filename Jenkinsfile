@@ -5,9 +5,6 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                // Si configuras el job como "Pipeline script from SCM",
-                // Jenkins hace el checkout automáticamente con 'checkout scm'.
-                // Lo dejamos explícito para que se vea en el log.
                 checkout scm
             }
         }
@@ -36,14 +33,11 @@ pipeline {
             }
         }
 
-        // (Opcional) acá podrías agregar tests para backend/frontend
-
         stage('Empaquetar release') {
             steps {
                 sh '''
                   echo "===== Empaquetando release ====="
 
-                  # Limpiar release anterior
                   rm -rf release
                   mkdir -p release/backend release/frontend
 
