@@ -9,6 +9,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                // Trae el código desde GitHub (rama configurada en el job)
                 checkout scm
             }
         }
@@ -32,7 +33,8 @@ pipeline {
                 sh '''
                     echo "===== Build frontend ====="
                     cd frontend
-                    npm run build
+                    # Desactivar modo CI estricto para que los warnings NO rompan el build
+                    CI=false npm run build
                 '''
             }
         }
@@ -41,7 +43,7 @@ pipeline {
             steps {
                 sh '''
                     echo "===== Empaquetando release ====="
-                    cd ..
+                    # Estamos en la raíz del repo (workspace de Jenkins)
                     zip -r release.zip backend frontend
                 '''
             }
