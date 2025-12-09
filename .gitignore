@@ -1,6 +1,38 @@
-node_modules
+# === Dependencias Node ===
+node_modules/
+**/node_modules/
+
+# === Archivos de entorno ===
 .env
+**/.env
+.env.*.local
+
+# No ignorar el ejemplo de entorno
+!.env.example
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Builds / artefactos de compilación ===
+dist/
+build/
+**/dist/
+**/build/
+
+# === Archivos de empaquetado/artefactos ===
+*.zip
+*.tar
+*.tar.gz
+
+# Si quieres ser explícito:
+# backend/backend.zip
+# frontend/frontend.zip
+
+# === Archivos de sistema ===
+.DS_Store
+Thumbs.db
 readme.md
-*.zip        <-- CAMBIO IMPORTANTE (añadir el asterisco)
-.gitignore   <-- AGREGADO (para ocultar el propio gitignore)
-...
