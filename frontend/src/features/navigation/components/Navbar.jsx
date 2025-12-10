@@ -104,7 +104,7 @@ export const Navbar = ({ isProductList = false }) => {
             textDecoration: "none",
           }}
         >
-          MERN SHOP
+          MENACHO SHOP
         </Typography>
 
         <Stack
