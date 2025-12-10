@@ -42,7 +42,6 @@ server.use("/reviews",reviewRoutes)
 server.use("/wishlist",wishlistRoutes)
 
 
-
 server.get("/",(req,res)=>{
     res.status(200).json({message:'running'})
 })

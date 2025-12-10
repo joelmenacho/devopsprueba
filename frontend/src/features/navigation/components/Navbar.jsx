@@ -11,7 +11,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Badge,
   Button,
-  Chip,
   Stack,
   useMediaQuery,
   useTheme,
@@ -28,6 +27,9 @@ import {
   selectProductIsFilterOpen,
   toggleFilters,
 } from "../../products/ProductSlice";
+
+const BRAND_BLUE = "#025EAA";
+const BRAND_GREEN = "#A7E92F";
 
 export const Navbar = ({ isProductList = false }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -72,9 +74,9 @@ export const Navbar = ({ isProductList = false }) => {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: "white",
+        background: `linear-gradient(90deg, ${BRAND_BLUE} 0%, ${BRAND_GREEN} 100%)`,
         boxShadow: "none",
-        color: "text.primary",
+        color: "#ffffff",
       }}
     >
       <Toolbar
@@ -82,7 +84,10 @@ export const Navbar = ({ isProductList = false }) => {
           p: 1,
           height: "4rem",
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
+          maxWidth: 1200,
+          width: "100%",
+          mx: "auto",
         }}
       >
         <Typography
@@ -109,7 +114,11 @@ export const Navbar = ({ isProductList = false }) => {
           columnGap={2}
         >
           <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <IconButton
+              onClick={handleOpenUserMenu}
+              sx={{ p: 0 }}
+              color="inherit"
+            >
               <Avatar alt={userInfo?.name} src="null" />
             </IconButton>
           </Tooltip>
@@ -143,7 +152,7 @@ export const Navbar = ({ isProductList = false }) => {
               </MenuItem>
             )}
             {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                 <Typography
                   component={Link}
                   color={"text.primary"}
@@ -156,20 +165,30 @@ export const Navbar = ({ isProductList = false }) => {
               </MenuItem>
             ))}
           </Menu>
+
           <Typography variant="h6" fontWeight={300}>
             {is480
               ? `${userInfo?.name.toString().split(" ")[0]}`
               : `Hey👋, ${userInfo?.name}`}
           </Typography>
+
           {loggedInUser?.isAdmin && (
             <Button
               variant="contained"
               onClick={() => navigate("/admin/dashboard")}
+              sx={{
+                ml: 1,
+                backgroundColor: BRAND_GREEN,
+                color: "#0f172a",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#8DC722",
+                },
+              }}
             >
               ADMIN
             </Button>
           )}
-          {/* {loggedInUser.isAdmin && <Button variant='contained'>Admin</Button>} */}
 
           <Stack
             sx={{
@@ -181,7 +200,10 @@ export const Navbar = ({ isProductList = false }) => {
           >
             {cartItems?.length > 0 && (
               <Badge badgeContent={cartItems.length} color="error">
-                <IconButton onClick={() => navigate("/cart")}>
+                <IconButton
+                  onClick={() => navigate("/cart")}
+                  color="inherit"
+                >
                   <ShoppingCartOutlinedIcon />
                 </IconButton>
               </Badge>
@@ -190,15 +212,24 @@ export const Navbar = ({ isProductList = false }) => {
             {!loggedInUser?.isAdmin && (
               <Stack>
                 <Badge badgeContent={wishlistItems?.length} color="error">
-                  <IconButton component={Link} to={"/wishlist"}>
+                  <IconButton
+                    component={Link}
+                    to={"/wishlist"}
+                    color="inherit"
+                  >
                     <FavoriteBorderIcon />
                   </IconButton>
                 </Badge>
               </Stack>
             )}
+
             {isProductList && (
-              <IconButton onClick={handleToggleFilters}>
-                <TuneIcon sx={{ color: isProductFilterOpen ? "black" : "" }} />
+              <IconButton onClick={handleToggleFilters} color="inherit">
+                <TuneIcon
+                  sx={{
+                    color: isProductFilterOpen ? BRAND_GREEN : "inherit",
+                  }}
+                />
               </IconButton>
             )}
           </Stack>
